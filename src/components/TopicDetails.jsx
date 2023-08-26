@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Swiper} from "swiper";
 import twitter_logo from "../assets/images/icon/twitter_logo.jpg";
 import retweet from "../assets/images/icon/research_rk_ui/retweet.svg"
@@ -7,9 +7,77 @@ import audience from "../assets/images/icon/research_rk_ui/audience.svg"
 import reply from "../assets/images/icon/research_rk_ui/btn-reply.svg"
 import share from "../assets/images/icon/research_rk_ui/share.svg"
 import Chart from 'chart.js/auto';
+import {DataContext} from "./data_hook";
 
 export const TopicDetails = () => {
+    const [state, setState] = useContext(DataContext);
+    const [prediction, setPredict] = useState();
+
+    function predict_topic(text) {
+        console.log(text)
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text: text.toString()}),
+        }
+
+        fetch('http://127.0.0.1:8000/predict_topic', requestOptions)
+            .then(response => response.json())
+            .then(data => setPredict(data.message)
+            );
+    }
+
+    function predict_sentiment(text) {
+        console.log(text)
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text: text.toString()}),
+        }
+
+        fetch('http://127.0.0.1:8000/predict_sentiment', requestOptions)
+            .then(response => response.json())
+            .then(data => setPredict(data.message)
+            );
+    }
+
+    async function predict_get_full_report(text) {
+        console.log(text)
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text: text.toString()}),
+        }
+
+        fetch('http://127.0.0.1:8000/predict_fullreport', requestOptions)
+            .then(response => response.json())
+            .then(data => setPredict(data.message)
+            );
+    }
+
+    function get_graphs() {
+        fetch("http://127.0.0.1:8000/graph2")
+            .then(response => response.json())
+            .then(data => console.log(data))
+    }
+
     useEffect(() => {
+        get_graphs()
+        switch (state.state) {
+            case "Topics":
+                predict_topic(state.data)
+                break;
+            case "Sentiment":
+                predict_sentiment(state.data)
+                // setPredict("Your analysed sentiment: Positive, and Emotional tone: Happy")
+                break;
+            case "Full_Report":
+                predict_get_full_report(state.data)
+                // setPredict("Your predicted topic is Oil Prices\n" +
+                //     "and\n" +
+                //     "Your analysed sentiment: Positive, and Emotional tone: Happy")
+                break;
+        }
         new Swiper('.swiper', {
             slidesPerView: 3,
             grid: {
@@ -149,7 +217,7 @@ export const TopicDetails = () => {
         <div className="topic_details">
             <div className="max_width">
                 <div className="main_heading">
-                    Analysing topic “Oil Prices”
+                    {prediction}
                 </div>
                 <div className="tweets_container">
                     <div className="heading">

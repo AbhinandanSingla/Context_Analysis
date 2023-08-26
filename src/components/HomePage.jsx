@@ -1,9 +1,13 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import close from "../assets/images/icon/close.svg";
+import {useNavigate} from "react-router";
+import {DataContext} from "./data_hook";
 
 export const HomePage = () => {
     const [tweet, setTweet] = useState();
     const [popup, setPopup] = useState(false);
+    const navigate = useNavigate();
+    const [state, setState] = useContext(DataContext);
     const topics = ["International Relations and Political Leadership ",
         "Military Actions and Attacks ", "Humanitarian Support and Needs",
         "Global Economy and Sanctions", "Political Figures and Commentary",
@@ -130,11 +134,12 @@ export const HomePage = () => {
                     <form onSubmit={(e) => {
                         e.preventDefault()
                     }}>
-                        <select className="topic_selection">
-                            {topics.map(v => <option value={v}>{v}</option>)}
-                        </select>
-                        <div className={"divider"}>OR</div>
+                        {/*<select className="topic_selection">*/}
+                        {/*    {topics.map(v => <option value={v}>{v}</option>)}*/}
+                        {/*</select>*/}
+                        {/*<div className={"divider"}>OR</div>*/}
                         <textarea className={"tweet_area"} name="tweet" id="" cols="30" rows="8" value={tweet}
+                                  placeholder={"Enter Your Tweet Here"}
                                   onChange={(e) => setTweet(e.target.value)}
                         />
                         <button className="analysis_button" type={"submit"} onClick={() => {
@@ -162,9 +167,31 @@ export const HomePage = () => {
                             What kind of action would you like to perform?
                         </div>
                         <div className="container">
-                            <button className="popup_btn" onClick={}>Analyse Topics</button>
-                            <button className="popup_btn">Analyse Sentiment/Tone</button>
-                            <button className="popup_btn">Get Full Report</button>
+                            <button className="popup_btn" onClick={() => {
+                                setState({
+                                    state: "Topics",
+                                    data: tweet
+                                })
+                                navigate("/topic_detail")
+                            }
+                            }>Analyse Topics
+                            </button>
+                            <button className="popup_btn" onClick={() => {
+                                setState({
+                                    state: "Sentiment",
+                                    data: tweet
+                                })
+                                navigate("/topic_detail")
+                            }}> Analyse Sentiment/Tone
+                            </button>
+                            <button className="popup_btn" onClick={() => {
+                                setState({
+                                    state: "Full_Report",
+                                    data: tweet
+                                })
+                                navigate("/topic_detail")
+                            }}>Get Full Report
+                            </button>
                         </div>
                     </div> : ""
                 }
