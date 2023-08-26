@@ -236,9 +236,10 @@ export const TopicDetails = () => {
                                 <div className="tweet_body">
                                     <div className="tweet_top">
                                         <div className="username">
-                                            Robert C <span className={"verification_tick"}></span>
+
+                                            War Stalker <span className={"verification_tick"}></span>
                                             <span className={"tweet_username"}>
-                                        @username <span className={"tweet_time"}>45h</span>
+                                        @SDFronttwit <span className={"tweet_time"}>5h</span>
                                     </span>
                                         </div>
                                         <div>
@@ -246,9 +247,12 @@ export const TopicDetails = () => {
                                         </div>
                                     </div>
                                     <div className="tweet_content">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ducimus
-                                        eaque velit vitae. Eum laborum maiores nostrum nulla, omnis optio qui veniam
-                                        veritatis.
+                                        Russia Ukraine War:
+                                        Ukranian soldiers attacked side on Russian soldiers from back side.
+
+                                        One was killed on the spot & second was kept as prisoner who tried to jump in
+                                        the trench & he mistook them as Russian soldiers.
+                                        @SDFronttwit
                                     </div>
                                     <div className="comment_section">
                                         <div className="comment_tab">
@@ -275,9 +279,9 @@ export const TopicDetails = () => {
                                 <div className="tweet_body">
                                     <div className="tweet_top">
                                         <div className="username">
-                                            Robert C <span className={"verification_tick"}></span>
+                                            Zagonel <span className={"verification_tick"}></span>
                                             <span className={"tweet_username"}>
-                                        @username <span className={"tweet_time"}>45h</span>
+                                        @Zagonel85 <span className={"tweet_time"}>3h</span>
                                     </span>
                                         </div>
                                         <div>
@@ -285,9 +289,9 @@ export const TopicDetails = () => {
                                         </div>
                                     </div>
                                     <div className="tweet_content">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ducimus
-                                        eaque velit vitae. Eum laborum maiores nostrum nulla, omnis optio qui veniam
-                                        veritatis.
+                                        🇷🇺🇺🇦 Russian artillery strikes on fortified positions of the Armed Forces of
+                                        Ukraine in the Seversk (Siversk) direction, on the front lines of the
+                                        Russia-Ukraine War.
                                     </div>
                                     <div className="comment_section">
                                         <div className="comment_tab">
@@ -314,9 +318,9 @@ export const TopicDetails = () => {
                                 <div className="tweet_body">
                                     <div className="tweet_top">
                                         <div className="username">
-                                            Robert C <span className={"verification_tick"}></span>
+                                            Dr. Khaled Alfaiomi <span className={"verification_tick"}></span>
                                             <span className={"tweet_username"}>
-                                        @username <span className={"tweet_time"}>45h</span>
+                                        @Alfaiomi <span className={"tweet_time"}>45h</span>
                                     </span>
                                         </div>
                                         <div>
@@ -324,9 +328,9 @@ export const TopicDetails = () => {
                                         </div>
                                     </div>
                                     <div className="tweet_content">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ducimus
-                                        eaque velit vitae. Eum laborum maiores nostrum nulla, omnis optio qui veniam
-                                        veritatis.
+                                        One of the reasons why Ukrainian military forces need drones so badly 🔥🔥✌🏼
+
+                                        #ukrainewar #Russia #UkraineRussianWar
                                     </div>
                                     <div className="comment_section">
                                         <div className="comment_tab">
