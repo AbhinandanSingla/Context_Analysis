@@ -1,11 +1,16 @@
 import {useContext, useState} from "react";
 import close from "../assets/images/icon/close.svg";
-import {useNavigate} from "react-router";
 import {DataContext} from "./data_hook";
+import {useNavigate} from "react-router";
 
 export const HomePage = () => {
-    const [tweet, setTweet] = useState();
+    const [error, setError] = useState("");
+    const [tweet, setTweet] = useState("");
     const [popup, setPopup] = useState(false);
+    const [columns, setColumns] = useState([])
+    const [selectedColumn, setSelectedColumn] = useState("");
+    const [selectTopic, setSelectTopic] = useState("");
+    const [selectedFile, setSelectFile] = useState("");
     const navigate = useNavigate();
     const [state, setState] = useContext(DataContext);
     const topics = ["International Relations and Political Leadership ",
@@ -14,6 +19,42 @@ export const HomePage = () => {
         "Human Impact and Casualties", "Media and News Coverage",
         "Public Opinion and Urgency",
         "Geopolitics and Weapons", "Military Technology and Equipment"]
+
+    function handleCsvSubmit(event) {
+        if (document.getElementById("uploadBox").value != "") {
+            // you have a file
+            const form = event.currentTarget;
+            const formData = new FormData(form);
+
+            const fetchOptions = {
+                method: form.method,
+            };
+            fetchOptions.body = formData;
+            fetch("http://127.0.0.1:5000/csv_analysis", fetchOptions)
+                .then(r => r.json())
+                .then(d => {
+                    setColumns(d['columns'])
+                    setSelectFile(d['filename'])
+                }).then(() => setPopup(true));
+
+        } else if (tweet !== "") {
+            // Call single Tweet Api here
+            console.log("Tweet found")
+            // setState({
+            //     datasetUploaded: false,
+            //     data: tweet,
+            //     topic: selectTopic
+            // });
+            // navigate('/progressbar')
+        } else {
+            console.log("File/Text not Found ")
+            setError("Please Select File or Enter Text in InputField")
+        }
+
+
+        event.preventDefault();
+    }
+
     return (<div className="home_content">
             <div className="max_width">
                 <div className="heading_container">
@@ -131,71 +172,88 @@ export const HomePage = () => {
                     <div className="heading">
                         Analysis
                     </div>
-                    <form onSubmit={(e) => {
-                        e.preventDefault()
-                    }}>
-                        {/*<select className="topic_selection">*/}
-                        {/*    {topics.map(v => <option value={v}>{v}</option>)}*/}
-                        {/*</select>*/}
+
+                    <form onSubmit={handleCsvSubmit} method="post">
+                        <select className="topic_selection" onChange={(v) => setSelectTopic(v.target.value)}>
+                            {topics.map(v => <option value={v}>{v}</option>)}
+                        </select>
+                        <br/>
+                        <br/>
                         {/*<div className={"divider"}>OR</div>*/}
                         <textarea className={"tweet_area"} name="tweet" id="" cols="30" rows="8" value={tweet}
                                   placeholder={"Enter Your Tweet Here"}
                                   onChange={(e) => setTweet(e.target.value)}
                         />
-                        <button className="analysis_button" type={"submit"} onClick={() => {
-                            if (tweet == "") {
-                                alert("Tweets is empty")
-                            } else {
-                                setPopup(true)
-                            }
-                        }}>
+                        <br/>
+                        <br/>
+                        <div className={"divider"}>OR</div>
+                        <br/>
+                        <input id={"uploadBox"} type="file" name="file" accept="text/csv"/>
+                        <button className="analysis_button" type={"submit"}>
                             Analysis
                         </button>
                     </form>
                 </div>
+
+
+                {/* This is pop page for options like Analysis of topic or sentiment*/}
+                {/*This was used in old evaluation*/}
                 {
                     popup ? <div className="analysis_popup">
                         <img className={"close"} src={close} alt=""
                              onClick={() => setPopup(false)}/>
-                        <div className="textfield">
-                            <input type="text" value={tweet} disabled/>
-                        </div>
+                        {/*<div className="textfield">*/}
+                        {/*    <input type="text" value={"Choose the Column"} disabled/>*/}
+                        {/*</div>*/}
                         <div className="analysis_popup_main_heading">
-                            Choose one
+                            Choose the Column
                         </div>
                         <div className="analysis_popup_sub_text">
                             What kind of action would you like to perform?
                         </div>
                         <div className="container">
+                            <select name="" id="" className={"select_column"}
+
+                                    onChange={(e) => {
+                                        console.log(e.target.value)
+                                        setSelectedColumn(e.target.value);
+                                    }}>
+                                {
+                                    columns.map((value, index, array) => <option key={index}
+                                                                                 value={value}>{value}</option>
+                                    )
+                                }
+                            </select>
                             <button className="popup_btn" onClick={() => {
-                                setState({
-                                    state: "Topics",
-                                    data: tweet
-                                })
-                                navigate("/topic_detail")
-                            }
-                            }>Analyse Topics
-                            </button>
-                            <button className="popup_btn" onClick={() => {
-                                setState({
-                                    state: "Sentiment",
-                                    data: tweet
-                                })
-                                navigate("/topic_detail")
-                            }}> Analyse Sentiment/Tone
-                            </button>
-                            <button className="popup_btn" onClick={() => {
-                                setState({
-                                    state: "Full_Report",
-                                    data: tweet
-                                })
-                                navigate("/topic_detail")
+                                if (tweet !== "") {
+                                    setState({
+                                        datasetUploaded: true,
+                                        selectedColumn: selectedColumn,
+                                        data: tweet,
+                                        topic: selectTopic,
+                                        filename: selectedFile
+                                    });
+                                } else {
+                                    setState({
+                                        datasetUploaded: true,
+                                        selectedColumn: selectedColumn,
+                                        topic: selectTopic,
+                                        filename: selectedFile
+                                    });
+                                }
+                                navigate('/progressbar')
                             }}>Get Full Report
                             </button>
                         </div>
                     </div> : ""
                 }
             </div>
+            {error !== "" ?
+                <div className="errorBox" onClick={() => setError("")}>
+                    <div className="errorText">{error}
+                    </div>
+                </div> : ""
+            }
         </div>
     )
 }

@@ -13,71 +13,108 @@ export const TopicDetails = () => {
     const [state, setState] = useContext(DataContext);
     const [prediction, setPredict] = useState();
 
-    function predict_topic(text) {
-        console.log(text)
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({text: text.toString()}),
-        }
+    const social_butterfly = [{
+        username: "war stalker",
+        profileName: "War Stalker",
+        description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher... As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
+        time: 5,
+    },
+        {
+            username: "war stalker",
+            profileName: "War Stalker",
+            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher... As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
+            time: 5,
+        },
+        {
+            username: "war stalker",
+            profileName: "War Stalker",
+            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher... As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
+            time: 5,
+        },
+        {
+            username: "war stalker",
+            profileName: "War Stalker",
+            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher... As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
+            time: 5,
+        },
+    ];
 
-        fetch('http://127.0.0.1:8000/predict_topic', requestOptions)
-            .then(response => response.json())
-            .then(data => setPredict(data.message)
-            );
+    function getData() {
+        const topic_tweet = {
+            label: ["jan", "feb", "mar", "april",
+                "may", "june", "july", "aug", "sept",
+                "oct", "nov", "dec"],
+            data: [200, 100, 50, 25]
+        }
+        const topic_top_words = {
+            label: ["jan", "feb", "mar", "april",
+                "may", "june", "july", "aug", "sept",
+                "oct", "nov", "dec"],
+            data: [200, 100, 50, 25]
+        }
+        const topic_frequency_words = {
+            label: ["jan", "feb", "mar", "april",
+                "may", "june", "july", "aug", "sept",
+                "oct", "nov", "dec"],
+            data: [200, 100, 50, 25]
+        }
+        chartMaker('topic_tweets');
+        chartMaker('topic_top_frequent_words', 'doughnut');
+        chartMaker('topic_word_distribution', 'bar', "", "bottom");
+
+        chartMaker('sentiment_tweets');
+        chartMaker('sentiment_top_frequent_words', 'doughnut');
+        chartMaker('sentiment_word_distribution', 'bar', "", "bottom");
+
+        chartMaker('temporal_analysis_graph', 'bar', "", "bottom", 'x', 1 | 2);
+
     }
 
-    function predict_sentiment(text) {
-        console.log(text)
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({text: text.toString()}),
-        }
-
-        fetch('http://127.0.0.1:8000/predict_sentiment', requestOptions)
-            .then(response => response.json())
-            .then(data => setPredict(data.message)
-            );
-    }
-
-    async function predict_get_full_report(text) {
-        console.log(text)
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({text: text.toString()}),
-        }
-
-        fetch('http://127.0.0.1:8000/predict_fullreport', requestOptions)
-            .then(response => response.json())
-            .then(data => setPredict(data.message)
-            );
-    }
-
-    function get_graphs() {
-        fetch("http://127.0.0.1:8000/graph2")
-            .then(response => response.json())
-            .then(data => console.log(data))
+    function chartMaker(id,
+                        type = 'pie',
+                        label = 'Acquisitions by year',
+                        legend_position = "right",
+                        axisIndex = 'y',
+                        aspectRatio = 1 | 2,
+                        labels = ["jan", "feb", "mar", "april",
+                            "may", "june", "july", "aug", "sept",
+                            "oct", "nov", "dec"],
+                        data = [200, 100, 50, 25]
+    ) {
+        new Chart(
+            document.getElementById(id),
+            {
+                type: type,
+                options: {
+                    indexAxis: axisIndex,
+                    responsive: true,
+                    aspectRatio: aspectRatio,
+                    animation: true,
+                    plugins: {
+                        legend: {
+                            position: legend_position,
+                            display: true
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                },
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: label,
+                            data: data
+                        }
+                    ]
+                }
+            }
+        );
     }
 
     useEffect(() => {
-        get_graphs()
-        switch (state.state) {
-            case "Topics":
-                predict_topic(state.data)
-                break;
-            case "Sentiment":
-                predict_sentiment(state.data)
-                // setPredict("Your analysed sentiment: Positive, and Emotional tone: Happy")
-                break;
-            case "Full_Report":
-                predict_get_full_report(state.data)
-                // setPredict("Your predicted topic is Oil Prices\n" +
-                //     "and\n" +
-                //     "Your analysed sentiment: Positive, and Emotional tone: Happy")
-                break;
-        }
+        getData()
         new Swiper('.swiper', {
             slidesPerView: 3,
             grid: {
@@ -85,268 +122,166 @@ export const TopicDetails = () => {
             },
             mousewheel: {
                 forceToAxis: true,
-            },
+            }
         });
+    }, []);
 
-        new Chart(
-            document.getElementById('temporal_analysis_graph'),
-            {
-                type: 'bar',
-                options: {
-                    responsive: true,
-                    aspectRatio: 1 | 2,
-                    animation: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                },
-                data: {
-                    labels: ["jan", "feb", "mar", "april",
-                        "may", "june", "july", "aug", "sept",
-                        "oct", "nov", "dec"],
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: [200, 100, 50, 25]
-                        }
-                    ]
-                }
-            }
-        );
-        new Chart(
-            document.getElementById('quantitative_horizontal_bar_graph'),
-            {
-                type: 'bar',
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    aspectRatio: 1 | 2,
-                    animation: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                },
-                data: {
-                    labels: ["jan", "feb", "mar", "april",
-                        "may", "june", "july", "aug", "sept",
-                        "oct", "nov", "dec"],
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: [200, 100, 50, 25]
-                        }
-                    ]
-                }
-            }
-        );
-        new Chart(
-            document.getElementById('quantitative_pie_graph'),
-            {
-                type: 'pie',
-                options: {
-                    borderWidth: 0,
-                    responsive: true,
-                    aspectRatio: 1 | 2,
-                    animation: true,
-                    plugins: {
-                        legend: {
-                            padding: 1,
-                            display: true,
-                            position: "right",
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                },
-                data: {
-                    labels: ["jan", "feb", "mar", "april",
-                        "may"],
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: [200, 100, 50, 25]
-                        }
-                    ]
-                }
-            }
-        );
-        new Chart(
-            document.getElementById('quantitative_doughnut_graph'),
-            {
-                type: 'doughnut',
-                options: {
-                    borderWidth: 0,
-                    responsive: true,
-                    aspectRatio: 1 | 2,
-                    animation: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: "right",
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                },
-                data: {
-                    labels: ["jan", "feb", "mar", "april",
-                        "may"],
-                    datasets: [
-                        {
-                            label: 'Acquisitions by year',
-                            data: [200, 100, 50, 25]
-                        }
-                    ]
-                }
-            }
-        );
-    }, [])
+
     return (<>
         <div className="topic_details">
             <div className="max_width">
                 <div className="main_heading">
                     {prediction}
                 </div>
+                <div className="quantitative_analysis">
+                    <div className="heading">
+                        Topic Analysis
+                    </div>
+                    <div className="quantitative_chat_container">
+                        <div className="tweet_pie_container">
+                            <div className="top_container">
+                                <div className="sub_heading">
+                                    Tweets
+                                </div>
+                                <div className="no_of_tweets">
+                                    5,98752
+                                </div>
+                                <div className="sub_text">
+                                    Number of tweets relating to this topic as compared to whole dataset
+                                </div>
+                            </div>
+                            <div className="quantitative_pie_graph">
+                                <canvas id="topic_tweets"/>
+                            </div>
+                        </div>
+                        <div className="tweet_donut_container">
+                            <div className="top_container">
+                                <div className="heading">
+                                    Top Frequency Words
+                                </div>
+                                <div className="sub_heading">
+                                    Words and terms that appeared the most
+                                </div>
+                            </div>
+                            <div className="quantitative_doughnut_graph">
+                                <canvas id="topic_top_frequent_words"/>
+                            </div>
+                        </div>
+                        <div className="tweet_donut_container tweet_horizontal_bar_graph">
+                            <div className="top_container">
+                                <div className="heading">
+                                    Top Frequency Words
+                                </div>
+                                <div className="sub_heading">
+                                    Words and terms that appeared the most
+                                </div>
+                            </div>
+                            <div className="quantitative_doughnut_graph">
+                                <canvas id="topic_word_distribution"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className="quantitative_analysis">
+                    <div className="heading">
+                        Sentiment Analysis
+                    </div>
+                    <div className="quantitative_chat_container">
+                        <div className="tweet_pie_container">
+                            <div className="top_container">
+                                <div className="sub_heading">
+                                    Tweets
+                                </div>
+                                <div className="no_of_tweets">
+                                    5,98752
+                                </div>
+                                <div className="sub_text">
+                                    Number of tweets relating to this topic as compared to whole dataset
+                                </div>
+                            </div>
+                            <div className="quantitative_pie_graph">
+                                <canvas id="sentiment_tweets"/>
+                            </div>
+                        </div>
+                        <div className="tweet_donut_container">
+                            <div className="top_container">
+                                <div className="heading">
+                                    Top Frequency Words
+                                </div>
+                                <div className="sub_heading">
+                                    Words and terms that appeared the most
+                                </div>
+                            </div>
+                            <div className="quantitative_doughnut_graph">
+                                <canvas id="sentiment_top_frequent_words"/>
+                            </div>
+                        </div>
+                        <div className="tweet_donut_container tweet_horizontal_bar_graph">
+                            <div className="top_container">
+                                <div className="heading">
+                                    Top Frequency Words
+                                </div>
+                                <div className="sub_heading">
+                                    Words and terms that appeared the most
+                                </div>
+                            </div>
+                            <div className="quantitative_doughnut_graph">
+                                <canvas id="sentiment_word_distribution"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <div className="tweets_container">
                     <div className="heading">
-                        Related Tweets
+                        Top Tweets (Social Butterfly)
                     </div>
                     <swiper-container slides-per-view="3"
-                                      speed="500" loop="true" css-mode="true" navigation="true" pagination="true"
-                                      scrollbar="true">
-                        <swiper-slide>
-                            <div className="tweet_card">
-                                <div className="profile_picture">
-                                    <img
-                                        src={twitter_logo}
-                                        alt=""/>
-                                </div>
-                                <div className="tweet_body">
-                                    <div className="tweet_top">
-                                        <div className="username">
+                                      speed="500" loop="true" css-mode="true" navigation="false" pagination="false"
+                                      scrollbar="false"
+                    >
+                        {
+                            social_butterfly.map((value, index, array) => <swiper-slide>
+                                <div className="tweet_card">
+                                    <div className="profile_picture">
+                                        <img
+                                            src={twitter_logo}
+                                            alt=""/>
+                                    </div>
+                                    <div className="tweet_body">
+                                        <div className="tweet_top">
+                                            <div className="username">
 
-                                            War Stalker <span className={"verification_tick"}></span>
-                                            <span className={"tweet_username"}>
-                                        @SDFronttwit <span className={"tweet_time"}>5h</span>
+                                                {value['profileName']} <span className={"verification_tick"}></span>
+                                                <span className={"tweet_username"}>
+                                       @{value['username']}<span className={"tweet_time"}>{value['time']}h</span>
                                     </span>
+                                            </div>
+                                            <div>
+                                                :
+                                            </div>
                                         </div>
-                                        <div>
-                                            :
+                                        <div className="tweet_content">
+                                            {value['description']}
                                         </div>
-                                    </div>
-                                    <div className="tweet_content">
-                                        Russia Ukraine War:
-                                        Ukranian soldiers attacked side on Russian soldiers from back side.
+                                        <div className="comment_section">
+                                            <div className="comment_tab">
+                                                <img src={like} alt=""/>
+                                                <img src={retweet} alt=""/>
+                                                <img src={reply} alt=""/>
+                                                <img src={audience} alt=""/>
+                                                <img src={share} alt=""/>
 
-                                        One was killed on the spot & second was kept as prisoner who tried to jump in
-                                        the trench & he mistook them as Russian soldiers.
-                                        @SDFronttwit
-                                    </div>
-                                    <div className="comment_section">
-                                        <div className="comment_tab">
-                                            <img src={like} alt=""/>
-                                            <img src={retweet} alt=""/>
-                                            <img src={reply} alt=""/>
-                                            <img src={audience} alt=""/>
-                                            <img src={share} alt=""/>
+                                            </div>
 
                                         </div>
 
                                     </div>
-
                                 </div>
-                            </div>
-                        </swiper-slide>
-                        <swiper-slide>
-                            <div className="tweet_card">
-                                <div className="profile_picture">
-                                    <img
-                                        src={twitter_logo}
-                                        alt=""/>
-                                </div>
-                                <div className="tweet_body">
-                                    <div className="tweet_top">
-                                        <div className="username">
-                                            Zagonel <span className={"verification_tick"}></span>
-                                            <span className={"tweet_username"}>
-                                        @Zagonel85 <span className={"tweet_time"}>3h</span>
-                                    </span>
-                                        </div>
-                                        <div>
-                                            :
-                                        </div>
-                                    </div>
-                                    <div className="tweet_content">
-                                        🇷🇺🇺🇦 Russian artillery strikes on fortified positions of the Armed Forces of
-                                        Ukraine in the Seversk (Siversk) direction, on the front lines of the
-                                        Russia-Ukraine War.
-                                    </div>
-                                    <div className="comment_section">
-                                        <div className="comment_tab">
-                                            <img src={like} alt=""/>
-                                            <img src={retweet} alt=""/>
-                                            <img src={reply} alt=""/>
-                                            <img src={audience} alt=""/>
-                                            <img src={share} alt=""/>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </swiper-slide>
-                        <swiper-slide>
-                            <div className="tweet_card">
-                                <div className="profile_picture">
-                                    <img
-                                        src={twitter_logo}
-                                        alt=""/>
-                                </div>
-                                <div className="tweet_body">
-                                    <div className="tweet_top">
-                                        <div className="username">
-                                            Dr. Khaled Alfaiomi <span className={"verification_tick"}></span>
-                                            <span className={"tweet_username"}>
-                                        @Alfaiomi <span className={"tweet_time"}>45h</span>
-                                    </span>
-                                        </div>
-                                        <div>
-                                            :
-                                        </div>
-                                    </div>
-                                    <div className="tweet_content">
-                                        One of the reasons why Ukrainian military forces need drones so badly 🔥🔥✌🏼
-
-                                        #ukrainewar #Russia #UkraineRussianWar
-                                    </div>
-                                    <div className="comment_section">
-                                        <div className="comment_tab">
-                                            <img src={like} alt=""/>
-                                            <img src={retweet} alt=""/>
-                                            <img src={reply} alt=""/>
-                                            <img src={audience} alt=""/>
-                                            <img src={share} alt=""/>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </swiper-slide>
+                            </swiper-slide>)
+                        }
                     </swiper-container>
 
                 </div>
@@ -374,56 +309,6 @@ export const TopicDetails = () => {
                             </div>
                             <div className="temporal_analysis_graph">
                                 <canvas id="temporal_analysis_graph"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div className="quantitative_analysis">
-                    <div className="heading">
-                        Quantitative Analysis
-                    </div>
-                    <div className="quantitative_chat_container">
-                        <div className="tweet_pie_container">
-                            <div className="top_container">
-                                <div className="sub_heading">
-                                    Tweets
-                                </div>
-                                <div className="no_of_tweets">
-                                    5,98752
-                                </div>
-                                <div className="sub_text">
-                                    Number of tweets relating to this topic as compared to whole dataset
-                                </div>
-                            </div>
-                            <div className="quantitative_pie_graph">
-                                <canvas id="quantitative_pie_graph"></canvas>
-                            </div>
-                        </div>
-                        <div className="tweet_donut_container">
-                            <div className="top_container">
-                                <div className="heading">
-                                    Top Frequency Words
-                                </div>
-                                <div className="sub_heading">
-                                    Words and terms that appeared the most
-                                </div>
-                            </div>
-                            <div className="quantitative_doughnut_graph">
-                                <canvas id="quantitative_doughnut_graph"></canvas>
-                            </div>
-                        </div>
-                        <div className="tweet_donut_container tweet_horizontal_bar_graph">
-                            <div className="top_container">
-                                <div className="heading">
-                                    Top Frequency Words
-                                </div>
-                                <div className="sub_heading">
-                                    Words and terms that appeared the most
-                                </div>
-                            </div>
-                            <div className="quantitative_doughnut_graph">
-                                <canvas id="quantitative_horizontal_bar_graph"></canvas>
                             </div>
                         </div>
 

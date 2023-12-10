@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Open+Sans:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500&family=Poppins:wght@400;500&family=Roboto:wght@300;500&display=swap');
+html {
+    overflow-x: hidden;
+}
 
 .navbar .max_width {
     width: 100%;
@@ -12,6 +15,13 @@
     display: flex;
     align-items: center;
     font-size: 2rem;
+    font-family: var(--Open-Sans);
+    font-weight: 500;
+}
+
+.navbar .max_width .logo a {
+    text-decoration: none;
+    color: #000;
 }
 
 .navbar .max_width .login {
@@ -26,6 +36,7 @@
 }
 
 .navbar .max_width .login a {
+    cursor: pointer;
     text-decoration: none;
     color: inherit;
 }
@@ -180,7 +191,6 @@
     display: flex;
     gap: 1rem;
     padding: 1rem 2rem;
-    align-items: center;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border: 1px solid gray;
 }
@@ -315,6 +325,7 @@
 .quantitative_chat_container {
     display: flex;
     gap: 2rem;
+    justify-content: center;
 }
 
 .tweet_donut_container .heading {
@@ -377,7 +388,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 40rem;
-    height: 40rem;
     border-radius: 10px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     background: #fff;
@@ -419,10 +429,18 @@
     background: var(--main_color);
     color: #fff;
 }
-.analysis_popup .container .popup_btn a{
+
+.analysis_popup .container .popup_btn a {
     text-decoration: none;
     color: #fff;
 }
+
+.analysis_popup .select_column {
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    font-family: var(--Open-Sans);
+}
+
 .analysis_popup .close {
     position: absolute;
     cursor: pointer;
@@ -433,7 +451,7 @@
 
 .login_email, .login_password {
     border-radius: 6px;
-    padding: 2rem 1rem;
+    padding: 1rem;
     width: 100%;
     background: rgba(236, 236, 236, 0.32);
 }
@@ -470,7 +488,7 @@
 }
 
 .remember_me {
-    margin-top: 1rem;
+    margin-top: 2rem;
     display: flex;
     justify-content: space-between;
 }
@@ -521,4 +539,86 @@
 .login_page .login_popup button {
     width: 100%;
     padding: 1.5rem 0;
+}
+
+.history {
+    padding: 2rem;
+}
+
+.history .heading {
+    font-size: 3rem;
+    font-family: var(--Open-Sans);
+    font-weight: 500;
+    padding: 2rem;
+}
+
+.history .history_card {
+    position: relative;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 2rem;
+    min-height: 15rem;
+    border-left: 5px solid #74414D;
+}
+
+.history .history_card .card_heading {
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: var(--Open-Sans);
+}
+
+.history .history_card .card_heading span {
+    float: right;
+    background: #74414D;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.history .history_card .card_sub_heading {
+    font-size: 1.5rem;
+    padding: 1rem 0;
+    font-family: var(--Open-Sans);
+}
+
+.history .history_container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.errorBox {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 20%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    width: 40rem;
+    min-height: 10rem;
+    z-index: 999;
+    font-size: 1.7rem;
+    padding: 2rem;
+    border-left: 8px solid #74414D;
+    border-top: 3px solid #74414D;
+    border-bottom: 3px solid #74414D;
+    background: #ffffff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-family: var(--Open-Sans);
+    transition: all 1s ease-in-out;
+    animation: bubbles3 1s linear;
+
+}
+
+@keyframes bubbles3 {
+    0% {
+        right: -100%;
+        opacity: 0;
+    }
+
+    100% {
+        right: 0;
+        opacity: 1;
+    }
 }
