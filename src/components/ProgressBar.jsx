@@ -2,9 +2,12 @@ import './proressbar.css'
 import {useEffect, useState} from "react";
 import {faBrush, faCode, faFlask, faRocket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useNavigate} from "react-router";
 
 export const ProgressBar = () => {
     const [status, setStatus] = useState(false);
+    const navigate = useNavigate();
+
     const progressData = {
         "first": {
             heading: "hsk & Research",
@@ -45,7 +48,7 @@ export const ProgressBar = () => {
                 "                        faucibus, pulvinar turpis vel, pretium ipsum. Donec commodo magna id quam tempus, at\n" +
                 "                        vulputate quam dignissim. Sed luctus a augue euismod scelerisque."
         },
-        "forth": {
+        "fourth": {
             heading: "Plan & Research",
             subheading: "Nullam porttitor pretium dolor vitae ullamcorper. Suspendisse blandit ipsum et\n" +
                 "                        condimentum efficitur. Nullam facilisis suscipit sapien, quis condimentum ex elementum\n" +
@@ -60,6 +63,7 @@ export const ProgressBar = () => {
         },
 
     }
+    
     const [selectedNode, setNodes] = useState("first");
     useEffect(() => {
         switch (selectedNode) {
@@ -75,12 +79,33 @@ export const ProgressBar = () => {
             }
             case "third": {
                 document.getElementById("span3").classList.add("border-change")
-                document.getElementById("span2").classList.add("border-change")
                 document.getElementById("nprogress-bar").value = 64;
+                break;
+            }
+            case "fourth": {
+                document.getElementById("span4").classList.add("border-change")
+                document.getElementById("nprogress-bar").value = 100;
                 break;
             }
         }
     }, [selectedNode])
+
+    // Implement the logic to change the progress bar by polling server every 5 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (selectedNode === "first") {
+                setNodes("second")
+            } else if (selectedNode === "second") {
+                setNodes("third")
+            } else if (selectedNode === "third") {
+                setNodes("fourth")
+                setTimeout(() => {
+                    navigate('/topic_detail') // Call the navigate function after 1 second
+                }, 1000);        
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [selectedNode]);
 
     return (
         <>
