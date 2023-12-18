@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const HistoryPage = () => {
     const [history, setHistory] = useState([{
@@ -23,6 +23,25 @@ export const HistoryPage = () => {
             "                  "
     },
     ]);
+
+    function fetchHistory() {
+        fetch("http://localhost:5000/history")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    setHistory(result);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
+
+    useEffect(() => {
+        fetchHistory();
+    },[])
+
     return (
         <div className={"history"}>
             <div className="heading">

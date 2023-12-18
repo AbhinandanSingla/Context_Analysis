@@ -9,7 +9,6 @@ export const HomePage = () => {
     const [popup, setPopup] = useState(false);
     const [columns, setColumns] = useState([])
     const [selectedColumn, setSelectedColumn] = useState("");
-    const [selectTopic, setSelectTopic] = useState("");
     const [selectedFile, setSelectFile] = useState("");
     const navigate = useNavigate();
     const [state, setState] = useContext(DataContext);
@@ -19,6 +18,7 @@ export const HomePage = () => {
         "Human Impact and Casualties", "Media and News Coverage",
         "Public Opinion and Urgency",
         "Geopolitics and Weapons", "Military Technology and Equipment"]
+    const [selectTopic, setSelectTopic] = useState(topics[0]);
 
     function handleCsvSubmit(event) {
         if (document.getElementById("uploadBox").value != "") {
