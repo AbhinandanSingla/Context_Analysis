@@ -9,6 +9,7 @@ export const HomePage = () => {
     const [popup, setPopup] = useState(false);
     const [columns, setColumns] = useState([])
     const [selectedColumn, setSelectedColumn] = useState("");
+    const [selectedDateColumn, setSelectedDateColumn] = useState("");
     const [selectedFile, setSelectFile] = useState("");
     const navigate = useNavigate();
     const [state, setState] = useContext(DataContext);
@@ -209,7 +210,7 @@ export const HomePage = () => {
                             Choose the Column
                         </div>
                         <div className="analysis_popup_sub_text">
-                            What kind of action would you like to perform?
+                            Select column which contains the text data
                         </div>
                         <div className="container">
                             <select name="" id="" className={"select_column"}
@@ -224,11 +225,42 @@ export const HomePage = () => {
                                     )
                                 }
                             </select>
+                            <div className="analysis_popup_sub_text">
+                                Select column which contains the date data
+                            </div>
+                            <select name="" id="" className={"select_column"}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                setSelectedDateColumn(e.target.value);
+                            }}>
+                            {
+                            columns.map((value, index, array) => <option key={index}
+                                                                        value={value}>{value}</option>
+                            )
+                            }
+                            </select>
+                            
+                            <div className="analysis_popup_sub_text">
+                                Emoji/Non Emoji
+                            </div>
+                            <select name="" id="" className={"select_column"}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                setSelectedDateColumn(e.target.value);
+                            }}>
+                            
+                            <option key="emoji" value="emoji">emoji</option>
+                            <option key="non-emoji" value="non-emoji">non-emoji</option>
+                            
+                            </select>
+
+
                             <button className="popup_btn" onClick={() => {
                                 if (tweet !== "") {
                                     setState({
                                         datasetUploaded: true,
                                         selectedColumn: selectedColumn,
+                                        selectedDateColumn: selectedDateColumn,
                                         data: tweet,
                                         topic: selectTopic,
                                         filename: selectedFile
@@ -237,6 +269,7 @@ export const HomePage = () => {
                                     setState({
                                         datasetUploaded: true,
                                         selectedColumn: selectedColumn,
+                                        selectedDateColumn: selectedDateColumn,
                                         topic: selectTopic,
                                         filename: selectedFile
                                     });

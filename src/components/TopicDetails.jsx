@@ -11,6 +11,7 @@ import {DataContext} from "./data_hook";
 
 export const TopicDetails = () => {
     const [state, setState] = useContext(DataContext);
+    const [socialButterfly, setSocialButterfly] = useState([]);
     const [prediction, setPredict] = useState();
 
     console.log("state is")
@@ -38,9 +39,11 @@ export const TopicDetails = () => {
                     "Aids, Rescue, Relief": 500,
                 },
                 "sentiment": {
-                    "positive": 1000,
-                    "negative": 800,
-                    "neutral": 700,
+                    "happy 😊": 1000,
+                    "sad 😔": 800,
+                    "anger 😠": 700,
+                    "fear 😱": 600,
+                    "surprise 😲": 500,
                 },
                 "most_positive_words": {
                     "safety": 1000,
@@ -56,36 +59,16 @@ export const TopicDetails = () => {
                     "missing": 600,
                     "depreciation": 500,
                 },
+                "social_butterfly": [{
+                    username: "war stalker",
+                    profileName: "War Stalker",
+                    description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher...As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
+                    time: 5,        
+                }]
             },
         });
     }
     }, [])
-        
-    const social_butterfly = [{
-        username: "war stalker",
-        profileName: "War Stalker",
-        description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher...As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
-        time: 5,
-    },
-        {
-            username: "war stalker",
-            profileName: "War Stalker",
-            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher...As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
-            time: 5,
-        },
-        {
-            username: "war stalker",
-            profileName: "War Stalker",
-            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher...As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
-            time: 5,
-        },
-        {
-            username: "war stalker",
-            profileName: "War Stalker",
-            description: "\"Inflation has retreated over the past year, largely thanks to a decline in gasoline prices, which had previously surged as a result of Russia’s invasion of Ukraine. By July, however, year-over-year oil price comparisons were no longer pulling the annual CPI rate lower, leaving food, shelter and mortgage-service costs to drive inflation higher...As for gasoline – the key driver of reductions in the rate of inflation over the past year – prices were down 12.9 per cent in July compared with a year before. This was considerably smaller than the 21.6-per-cent drop in June. On a monthly basis, gas prices rose 0.9 per cent. They have continued to press higher in August, suggesting that energy costs will push up headline inflation in the next CPI report.\" https://theglobeandmail.com/business/article-inflation-rate-july-canada/… #cdnpoli",
-            time: 5,
-        },
-    ];
 
     function getData() {
         const topic_tweet = {
@@ -117,8 +100,6 @@ export const TopicDetails = () => {
         // chartMaker('sentiment_top_frequent_words', 'doughnut');
         // chartMaker('sentiment_word_distribution', 'bar', "", "bottom");
 
-        chartMaker('temporal_analysis_graph', 'bar', "", "bottom", 'x', 1 | 2, topic_frequency_words.label, topic_frequency_words.data);
-
     }
 
     useEffect(() => {
@@ -144,10 +125,13 @@ export const TopicDetails = () => {
             let most_negative_labels = Object.keys(state.summary.most_negative_words)
             let most_negative_data = Object.values(state.summary.most_negative_words)
             chartMaker('sentiment_word_distribution', 'bar', "", "bottom", 'x', 1 | 2, most_negative_labels, most_negative_data);
+
+            setSocialButterfly(state.summary.social_butterfly);
         // chartMaker('sentiment_top_frequent_words', 'doughnut');
         // chartMaker('sentiment_word_distribution', 'bar', "", "bottom");
-
-
+            if (state.summary.temporary_analysis) {
+                chartMaker('temporal_analysis_graph', 'bar', "", "bottom", 'x', 1 | 2, state.summary.temporary_analysis.label, state.summary.temporary_analysis.data);
+            }
         }
     }, [state.summary])
 
@@ -319,7 +303,7 @@ export const TopicDetails = () => {
                                       scrollbar="false"
                     >
                         {
-                            social_butterfly.map((value, index, array) => <swiper-slide>
+                            socialButterfly.map((value, index, array) => <swiper-slide>
                                 <div className="tweet_card">
                                     <div className="profile_picture">
                                         <img
