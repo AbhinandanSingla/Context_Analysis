@@ -10,6 +10,7 @@ export const HomePage = () => {
     const [columns, setColumns] = useState([])
     const [selectedColumn, setSelectedColumn] = useState("");
     const [selectedDateColumn, setSelectedDateColumn] = useState("");
+    const [selectedEmoji, setSelectedEmoji] = useState("non-emoji");
     const [selectedFile, setSelectFile] = useState("");
     const navigate = useNavigate();
     const [state, setState] = useContext(DataContext);
@@ -40,7 +41,32 @@ export const HomePage = () => {
 
         } else if (tweet !== "") {
             // Call single Tweet Api here
-            console.log("Tweet found")
+
+            fetch('http://127.0.0.1:5000/single_tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tweet: tweet,
+                    topic: selectTopic,
+                    emoji: selectedEmoji
+                }) // Replace 'your_data_here' with the actual data to be preprocessed
+            })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        console.log(data)
+                        setError(data["message"])
+                    });    
+                } else {
+                   console.error('Sentiment failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error occurred during data preprocessing:', error);
+            });
+
             // setState({
             //     datasetUploaded: false,
             //     data: tweet,
@@ -230,7 +256,6 @@ export const HomePage = () => {
                             </div>
                             <select name="" id="" className={"select_column"}
                             onChange={(e) => {
-                                console.log(e.target.value)
                                 setSelectedDateColumn(e.target.value);
                             }}>
                             {
@@ -245,13 +270,11 @@ export const HomePage = () => {
                             </div>
                             <select name="" id="" className={"select_column"}
                             onChange={(e) => {
-                                console.log(e.target.value)
-                                setSelectedDateColumn(e.target.value);
+                                setSelectedEmoji(e.target.value);
                             }}>
                             
                             <option key="emoji" value="emoji">emoji</option>
                             <option key="non-emoji" value="non-emoji">non-emoji</option>
-                            
                             </select>
 
 
@@ -271,7 +294,9 @@ export const HomePage = () => {
                                         selectedColumn: selectedColumn,
                                         selectedDateColumn: selectedDateColumn,
                                         topic: selectTopic,
-                                        filename: selectedFile
+                                        filename: selectedFile,
+                                        emoji: selectedEmoji,
+                                        selectedDateColumn: selectedDateColumn,
                                     });
                                 }
                                 navigate('/progressbar')
